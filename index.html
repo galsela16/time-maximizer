@@ -16,6 +16,7 @@
     --paper-line:#E4DDCB;
     --brass:#BE8A3D;
     --brass-dark:#9C6E28;
+    --brass-light:#F1E3CB;
     --work:#2F6F6B;
     --work-light:#DCEDEB;
     --home:#C1614A;
@@ -27,6 +28,10 @@
     --text-mid:#5B6472;
     --text-light:#8C93A0;
     --danger:#B4453C;
+    --radius:12px;
+    --radius-sm:8px;
+    --shadow-sm:0 1px 2px rgba(28,35,49,0.06);
+    --shadow-md:0 10px 28px rgba(28,35,49,0.10);
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
@@ -41,307 +46,310 @@
     font-family:'Frank Ruhl Libre', 'David Libre', serif;
     color:var(--ink);
   }
-  #app{max-width:1180px;margin:0 auto;padding-bottom:60px;}
+  #app{max-width:900px;margin:0 auto;padding-bottom:60px;}
+  button{font-family:inherit;}
+  :focus-visible{outline:2px solid var(--brass);outline-offset:2px;}
+
+  @keyframes fadeUp{
+    from{opacity:0;transform:translateY(6px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+  .step-panel{animation:fadeUp .28s ease both;}
 
   /* Header */
   .app-header{
     background:var(--ink);
     color:var(--parchment);
-    padding:28px 32px 24px;
+    padding:26px 28px 22px;
     border-bottom:4px solid var(--brass);
   }
   .app-header .eyebrow{
-    font-size:12px;
-    letter-spacing:2px;
+    font-size:11.5px;
+    letter-spacing:2.5px;
     color:var(--brass);
     text-transform:uppercase;
-    margin-bottom:6px;
+    margin-bottom:5px;
     font-weight:600;
   }
   .app-header h1{
     color:#F6F2E9;
-    font-size:34px;
-    margin:0 0 6px;
+    font-size:30px;
+    margin:0 0 5px;
     font-weight:700;
   }
   .app-header p{
-    color:#B9C0CC;
+    color:#AFB7C4;
     margin:0;
-    max-width:640px;
-    font-size:14.5px;
+    max-width:600px;
+    font-size:13.5px;
   }
 
-  .container{padding:28px 32px;}
+  .container{padding:24px 24px 8px;}
 
-  .grid-2{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:20px;
+  /* Stepper */
+  .stepper{
+    display:flex;
+    gap:8px;
+    margin-bottom:22px;
   }
-  @media(max-width:820px){ .grid-2{grid-template-columns:1fr;} }
+  .step-tab{
+    flex:1;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    background:#fff;
+    border:1px solid var(--paper-line);
+    border-radius:999px;
+    padding:11px 10px;
+    cursor:pointer;
+    font-weight:600;font-size:13px;color:var(--text-mid);
+    transition:background .15s,color .15s,border-color .15s;
+  }
+  .step-tab .num{
+    width:20px;height:20px;border-radius:50%;
+    background:var(--paper-line);color:var(--text-mid);
+    display:flex;align-items:center;justify-content:center;
+    font-size:11px;font-weight:700;flex-shrink:0;
+  }
+  .step-tab.active{background:var(--ink);color:#fff;border-color:var(--ink);}
+  .step-tab.active .num{background:var(--brass);color:var(--ink);}
+  .step-tab.done .num{background:var(--work);color:#fff;}
+  .step-tab:hover:not(.active){border-color:var(--text-light);}
 
   .card{
     background:var(--card);
     border:1px solid var(--paper-line);
-    border-radius:10px;
-    padding:20px 22px;
+    border-radius:var(--radius);
+    padding:22px 24px;
+    box-shadow:var(--shadow-sm);
   }
-  .card h2{
-    font-size:19px;
-    margin:0 0 4px;
-  }
-  .card .sub{
-    color:var(--text-mid);
-    font-size:13px;
-    margin:0 0 16px;
-  }
+  .card h2{font-size:19px;margin:0 0 4px;}
+  .card .sub{color:var(--text-mid);font-size:13px;margin:0 0 16px;}
 
-  /* list items */
-  .item-row{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    padding:10px 12px;
+  .stat-line{
+    display:flex;gap:16px;flex-wrap:wrap;
+    background:var(--parchment);
     border:1px solid var(--paper-line);
-    border-radius:8px;
+    border-radius:var(--radius-sm);
+    padding:10px 14px;
+    margin-bottom:16px;
+    font-size:12.5px;
+    color:var(--text-mid);
+  }
+  .stat-line b{color:var(--ink);font-weight:700;}
+
+  /* list */
+  .item-row{
+    display:flex;align-items:center;gap:12px;
+    padding:11px 13px;
+    border:1px solid var(--paper-line);
+    border-radius:var(--radius-sm);
     margin-bottom:8px;
     background:#FCFAF5;
+    transition:box-shadow .15s;
   }
-  .item-row .tag{
-    font-size:11px;
-    font-weight:700;
-    padding:3px 9px;
-    border-radius:20px;
-    white-space:nowrap;
-    color:#fff;
+  .item-row:hover{box-shadow:var(--shadow-sm);}
+  .item-row .bar{width:4px;align-self:stretch;border-radius:3px;flex-shrink:0;}
+  .bar-work{background:var(--work);}
+  .bar-home{background:var(--home);}
+  .bar-blocked{background:var(--blocked);}
+  .item-row .type-label{
+    font-size:11px;font-weight:700;white-space:nowrap;
+    padding:3px 9px;border-radius:20px;color:#fff;flex-shrink:0;
   }
-  .tag-work{background:var(--work);}
-  .tag-home{background:var(--home);}
-  .tag-blocked{background:var(--blocked);}
   .item-row .main{flex:1;min-width:0;}
   .item-row .main .name{font-weight:600;font-size:14px;}
   .item-row .main .meta{font-size:12px;color:var(--text-mid);margin-top:1px;}
   .item-row .del{
     border:none;background:none;color:var(--text-light);
-    cursor:pointer;font-size:18px;line-height:1;padding:4px 6px;border-radius:6px;
+    cursor:pointer;font-size:17px;line-height:1;padding:5px 7px;border-radius:6px;flex-shrink:0;
   }
   .item-row .del:hover{color:var(--danger);background:#F3E3E1;}
-  .empty-note{color:var(--text-light);font-size:13px;padding:8px 2px;}
 
-  /* form */
-  .form-block{margin-top:14px;border-top:1px dashed var(--paper-line);padding-top:14px;}
-  .form-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px;
-    margin-bottom:10px;
+  .empty-state{
+    text-align:center;padding:26px 10px 18px;color:var(--text-light);
   }
-  .form-grid .full{grid-column:1 / -1;}
-  label{
-    display:block;
-    font-size:12px;
-    color:var(--text-mid);
-    margin-bottom:4px;
-    font-weight:600;
+  .empty-state .glyph{font-size:26px;margin-bottom:6px;opacity:.7;}
+  .empty-state p{margin:0;font-size:13px;}
+
+  /* add details/summary */
+  details.add-details{
+    margin-top:14px;
+    border-top:1px dashed var(--paper-line);
+    padding-top:14px;
   }
-  input[type=text], input[type=number], input[type=time], select{
-    width:100%;
-    padding:8px 10px;
-    border:1px solid var(--paper-line);
-    border-radius:6px;
-    background:#fff;
-    font-family:inherit;
-    font-size:13.5px;
-    color:var(--text-dark);
+  details.add-details summary{
+    list-style:none;cursor:pointer;
+    display:inline-flex;align-items:center;gap:6px;
+    font-weight:600;font-size:13.5px;color:var(--brass-dark);
+    padding:7px 4px;
+    user-select:none;
   }
-  input:focus, select:focus{
-    outline:2px solid var(--brass);
-    outline-offset:1px;
-    border-color:var(--brass);
+  details.add-details summary::-webkit-details-marker{display:none;}
+  details.add-details summary .plusicon{
+    width:20px;height:20px;border-radius:50%;background:var(--brass-light);
+    color:var(--brass-dark);display:flex;align-items:center;justify-content:center;
+    font-size:14px;font-weight:700;transition:transform .15s;
   }
+  details.add-details[open] summary .plusicon{transform:rotate(45deg);}
+  .add-form{padding-top:10px;}
+
+  .field-label{
+    display:block;font-size:12px;color:var(--text-mid);margin-bottom:6px;font-weight:600;
+  }
+  .field{margin-bottom:12px;}
+  input[type=text], input[type=number], input[type=time]{
+    width:100%;padding:9px 11px;border:1px solid var(--paper-line);border-radius:var(--radius-sm);
+    background:#fff;font-family:inherit;font-size:13.5px;color:var(--text-dark);
+  }
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  @media(max-width:520px){.row2{grid-template-columns:1fr;}}
+
+  .pill-group{display:flex;flex-wrap:wrap;gap:7px;}
+  .pill{
+    padding:8px 14px;border-radius:999px;border:1.5px solid var(--paper-line);
+    background:#fff;font-size:13px;font-weight:600;color:var(--text-mid);cursor:pointer;
+    transition:all .12s;
+  }
+  .pill[data-value="עבודה"].active{background:var(--work);border-color:var(--work);color:#fff;}
+  .pill[data-value="בית"].active{background:var(--home);border-color:var(--home);color:#fff;}
+  .pill[data-value="חסום"].active{background:var(--blocked);border-color:var(--blocked);color:#fff;}
+  .pill[data-value="שינה"].active{background:var(--ink);border-color:var(--ink);color:#fff;}
+  .pill[data-value="גבוהה"].active{background:var(--danger);border-color:var(--danger);color:#fff;}
+  .pill[data-value="בינונית"].active{background:var(--brass);border-color:var(--brass);color:#fff;}
+  .pill[data-value="נמוכה"].active{background:var(--free);border-color:var(--free);color:#fff;}
+
   .day-picker{display:flex;gap:5px;flex-wrap:wrap;}
   .day-chip{
-    width:32px;height:32px;border-radius:50%;
-    border:1px solid var(--paper-line);
-    background:#fff;
+    min-width:32px;height:32px;padding:0 6px;border-radius:16px;
+    border:1px solid var(--paper-line);background:#fff;
     display:flex;align-items:center;justify-content:center;
-    font-size:12px;font-weight:600;color:var(--text-mid);
-    cursor:pointer;user-select:none;
+    font-size:12px;font-weight:600;color:var(--text-mid);cursor:pointer;user-select:none;
   }
   .day-chip.active{background:var(--ink);color:#fff;border-color:var(--ink);}
+  .day-chip.none-chip{font-size:11px;padding:0 10px;}
+
+  .mini-chip{
+    padding:5px 10px;border-radius:14px;border:1px solid var(--paper-line);background:#fff;
+    font-size:12px;color:var(--text-mid);cursor:pointer;
+  }
+  .mini-chip:hover{border-color:var(--brass);color:var(--brass-dark);}
+  .mini-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;}
+
+  .inline-error{color:var(--danger);font-size:12.5px;margin:6px 0 0;display:none;}
+  .inline-error.show{display:block;}
 
   .btn{
     display:inline-flex;align-items:center;justify-content:center;gap:6px;
-    border:none;border-radius:7px;
-    padding:9px 16px;
-    font-family:inherit;font-weight:600;font-size:13.5px;
-    cursor:pointer;
+    border:none;border-radius:var(--radius-sm);
+    padding:10px 18px;
+    font-weight:600;font-size:13.5px;cursor:pointer;
+    transition:background .15s;
   }
   .btn-brass{background:var(--brass);color:#fff;}
   .btn-brass:hover{background:var(--brass-dark);}
   .btn-outline{background:none;border:1px solid var(--paper-line);color:var(--text-dark);}
   .btn-outline:hover{border-color:var(--text-mid);}
-  .btn-full{width:100%;}
+  .btn-full{width:100%;margin-top:6px;}
+  .btn-ghost{background:none;border:none;color:var(--text-mid);text-decoration:underline;padding:6px 2px;cursor:pointer;font-size:13px;}
+  .btn-ghost:hover{color:var(--ink);}
 
-  .maximize-bar{
-    margin:26px 0 6px;
-    text-align:center;
+  .step-actions{
+    display:flex;justify-content:space-between;align-items:center;
+    margin-top:20px;
   }
-  .btn-maximize{
-    background:var(--ink);
-    color:var(--brass);
-    font-family:'Frank Ruhl Libre',serif;
-    font-size:18px;
-    font-weight:700;
-    padding:16px 40px;
-    border-radius:10px;
-    letter-spacing:0.5px;
-    box-shadow:0 4px 14px rgba(28,35,49,0.25);
-  }
-  .btn-maximize:hover{background:var(--ink-light);}
-  .maximize-hint{color:var(--text-mid);font-size:12.5px;margin-top:8px;}
+  .step-actions.single{justify-content:flex-end;}
 
   /* Results */
-  .results{
-    margin-top:34px;
-    border-top:3px solid var(--ink);
-    padding-top:26px;
-  }
+  .back-link{margin-bottom:14px;}
   .hero-panel{
-    display:grid;
-    grid-template-columns:190px 1fr;
-    gap:28px;
-    align-items:center;
-    background:var(--ink);
-    color:#F6F2E9;
-    border-radius:12px;
-    padding:26px 28px;
-    margin-bottom:24px;
+    display:grid;grid-template-columns:170px 1fr;gap:26px;align-items:center;
+    background:var(--ink);color:#F6F2E9;border-radius:var(--radius);
+    padding:24px 26px;margin-bottom:22px;box-shadow:var(--shadow-md);
   }
-  @media(max-width:640px){ .hero-panel{grid-template-columns:1fr;text-align:center;} }
-  .dial-wrap{position:relative;width:170px;height:170px;margin:0 auto;}
+  @media(max-width:600px){.hero-panel{grid-template-columns:1fr;text-align:center;}}
+  .dial-wrap{position:relative;width:150px;height:150px;margin:0 auto;}
   .dial{
-    width:170px;height:170px;border-radius:50%;
-    position:relative;
+    width:150px;height:150px;border-radius:50%;
+    box-shadow:inset 0 0 0 5px rgba(0,0,0,0.18), 0 8px 18px rgba(0,0,0,0.3);
   }
   .dial-hole{
-    position:absolute;top:18px;left:18px;right:18px;bottom:18px;
-    background:var(--ink);
-    border-radius:50%;
+    position:absolute;top:16px;left:16px;right:16px;bottom:16px;
+    background:var(--ink);border-radius:50%;
     display:flex;flex-direction:column;align-items:center;justify-content:center;
   }
-  .dial-hole .num{font-family:'Frank Ruhl Libre',serif;font-size:32px;font-weight:700;color:var(--brass);line-height:1;}
-  .dial-hole .lbl{font-size:10.5px;color:#B9C0CC;margin-top:4px;text-align:center;}
-  .hero-text h3{color:#F6F2E9;font-size:20px;margin:0 0 8px;}
-  .hero-text p{color:#B9C0CC;font-size:13.5px;margin:0 0 14px;max-width:520px;}
-  .legend{display:flex;flex-wrap:wrap;gap:14px;}
-  .legend .li{display:flex;align-items:center;gap:6px;font-size:12.5px;color:#DDE2E8;}
-  .legend .dot{width:10px;height:10px;border-radius:50%;display:inline-block;}
+  .dial-hole .num{font-family:'Frank Ruhl Libre',serif;font-size:28px;font-weight:700;color:var(--brass);line-height:1;}
+  .dial-hole .lbl{font-size:10px;color:#B9C0CC;margin-top:4px;text-align:center;}
+  .hero-text h3{color:#F6F2E9;font-size:19px;margin:0 0 7px;}
+  .hero-text p{color:#B9C0CC;font-size:13px;margin:0 0 13px;max-width:520px;}
+  .legend{display:flex;flex-wrap:wrap;gap:13px;}
+  .legend .li{display:flex;align-items:center;gap:6px;font-size:12px;color:#DDE2E8;}
+  .legend .dot{width:9px;height:9px;border-radius:50%;display:inline-block;}
 
   .unscheduled-warn{
-    background:#FBEDEA;
-    border:1px solid #E9C3BB;
-    color:#7A2E24;
-    border-radius:8px;
-    padding:12px 16px;
-    font-size:13px;
-    margin-bottom:20px;
+    background:#FBEDEA;border:1px solid #E9C3BB;color:#7A2E24;
+    border-radius:var(--radius-sm);padding:12px 16px;font-size:13px;margin-bottom:18px;
   }
   .unscheduled-warn strong{display:block;margin-bottom:4px;}
 
-  .tabs{display:flex;gap:6px;margin-bottom:16px;}
+  .tabs{display:flex;gap:6px;margin-bottom:14px;}
   .tab-btn{
     padding:8px 18px;border-radius:20px;border:1px solid var(--paper-line);
-    background:#fff;font-family:inherit;font-weight:600;font-size:13px;cursor:pointer;color:var(--text-mid);
+    background:#fff;font-weight:600;font-size:13px;cursor:pointer;color:var(--text-mid);
   }
   .tab-btn.active{background:var(--ink);color:#fff;border-color:var(--ink);}
 
-  /* Calendar grid */
   .cal-scroll{
-    max-height:600px;
-    overflow-y:auto;
-    border:1px solid var(--paper-line);
-    border-radius:10px;
-    background:#fff;
+    max-height:560px;overflow-y:auto;overflow-x:auto;
+    border:1px solid var(--paper-line);border-radius:var(--radius);background:#fff;box-shadow:var(--shadow-sm);
   }
-  .cal-grid{
-    display:grid;
-    grid-template-columns:repeat(7, minmax(78px,1fr)) 46px;
-    position:relative;
-  }
+  .cal-grid{display:grid;grid-template-columns:repeat(7, minmax(88px,1fr)) 44px;position:relative;min-width:660px;}
   .cal-head{
-    display:grid;
-    grid-template-columns:repeat(7, minmax(78px,1fr)) 46px;
-    position:sticky;top:0;background:#fff;z-index:3;
-    border-bottom:1px solid var(--paper-line);
+    display:grid;grid-template-columns:repeat(7, minmax(88px,1fr)) 44px;
+    position:sticky;top:0;background:#fff;z-index:3;border-bottom:1px solid var(--paper-line);min-width:660px;
   }
   .cal-head .d{
-    text-align:center;padding:10px 2px;font-weight:700;font-size:12.5px;color:var(--ink);
+    text-align:center;padding:9px 2px;font-weight:700;font-size:12px;color:var(--ink);
     border-right:1px solid var(--paper-line);
   }
-  .cal-head .axis-head{}
-  .day-col{
-    position:relative;
-    border-right:1px solid var(--paper-line);
-  }
+  .day-col{position:relative;border-right:1px solid var(--paper-line);}
   .axis-col{position:relative;}
   .axis-label{
-    position:absolute;right:0;left:0;text-align:center;
-    font-size:9.5px;color:var(--text-light);
+    position:absolute;right:0;left:0;text-align:center;font-size:9px;color:var(--text-light);
     transform:translateY(-6px);
   }
   .hour-line{position:absolute;left:0;right:0;border-top:1px solid #EFEAE0;}
-  .block{
-    position:absolute;left:3%;right:3%;
-    border-radius:4px;
-    font-size:10.5px;
-    padding:2px 5px;
-    overflow:hidden;
-    line-height:1.25;
-  }
-  .block-window{opacity:0.55;}
-  .block-blocked{background:repeating-linear-gradient(45deg, var(--blocked-light), var(--blocked-light) 5px, #DFDACE 5px, #DFDACE 10px); color:var(--text-mid); font-weight:600;}
-  .block-work-window{background:var(--work-light);color:var(--work);font-weight:600;}
-  .block-home-window{background:var(--home-light);color:var(--home);font-weight:600;}
+  .block{position:absolute;left:3%;right:3%;border-radius:4px;font-size:10px;padding:2px 5px;overflow:hidden;line-height:1.25;}
+  .block-blocked{background:repeating-linear-gradient(45deg, var(--blocked-light), var(--blocked-light) 5px, #DFDACE 5px, #DFDACE 10px);color:var(--text-mid);font-weight:600;opacity:.7;}
+  .block-work-window{background:var(--work-light);opacity:.55;}
+  .block-home-window{background:var(--home-light);opacity:.55;}
   .block-task{color:#fff;font-weight:600;left:6%;right:6%;box-shadow:0 1px 3px rgba(0,0,0,0.15);z-index:2;}
   .block-task.work{background:var(--work);}
   .block-task.home{background:var(--home);}
 
-  /* Gantt */
-  .gantt{border:1px solid var(--paper-line);border-radius:10px;background:#fff;padding:14px 16px;}
-  .gantt-head{
-    display:grid;grid-template-columns:170px 1fr;gap:10px;margin-bottom:6px;
-  }
+  .gantt{border:1px solid var(--paper-line);border-radius:var(--radius);background:#fff;padding:14px 16px;box-shadow:var(--shadow-sm);}
+  .gantt-head{display:grid;grid-template-columns:150px 1fr;gap:10px;margin-bottom:6px;}
   .gantt-daylabels{display:grid;grid-template-columns:repeat(7,1fr);}
-  .gantt-daylabels span{text-align:center;font-size:11px;color:var(--text-mid);font-weight:700;}
-  .gantt-row{
-    display:grid;grid-template-columns:170px 1fr;gap:10px;
-    align-items:center;
-    padding:6px 0;
-    border-bottom:1px solid #F0ECE1;
-  }
+  .gantt-daylabels span{text-align:center;font-size:10.5px;color:var(--text-mid);font-weight:700;}
+  .gantt-row{display:grid;grid-template-columns:150px 1fr;gap:10px;align-items:center;padding:6px 0;border-bottom:1px solid #F0ECE1;}
   .gantt-row:last-child{border-bottom:none;}
-  .gantt-label{font-size:12.5px;font-weight:600;display:flex;align-items:center;gap:6px;}
+  .gantt-label{font-size:12px;font-weight:600;display:flex;align-items:center;gap:6px;}
   .gantt-label .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
   .gantt-track{
-    position:relative;height:26px;
+    position:relative;height:26px;border-radius:5px;
     background-image:repeating-linear-gradient(90deg, transparent, transparent calc(100%/7 - 1px), #EFEAE0 calc(100%/7 - 1px), #EFEAE0 calc(100%/7));
-    border-radius:5px;
   }
-  .gantt-bar{
-    position:absolute;top:3px;bottom:3px;border-radius:4px;
-    font-size:9.5px;color:#fff;display:flex;align-items:center;padding:0 5px;overflow:hidden;font-weight:600;
-  }
+  .gantt-bar{position:absolute;top:3px;bottom:3px;border-radius:4px;font-size:9.5px;color:#fff;display:flex;align-items:center;padding:0 5px;overflow:hidden;font-weight:600;}
   .gantt-bar.work{background:var(--work);}
   .gantt-bar.home{background:var(--home);}
-  .gantt-bar.unscheduled{background:repeating-linear-gradient(45deg, #D9D3C4, #D9D3C4 5px, #C8C1AE 5px, #C8C1AE 10px); color:var(--text-mid);}
-  .gantt-deadline{
-    position:absolute;top:-2px;bottom:-2px;width:0;
-    border-right:2px dashed var(--danger);
-  }
+  .gantt-bar.unscheduled{background:repeating-linear-gradient(45deg, #D9D3C4, #D9D3C4 5px, #C8C1AE 5px, #C8C1AE 10px);color:var(--text-mid);}
+  .gantt-deadline{position:absolute;top:-2px;bottom:-2px;width:0;border-right:2px dashed var(--danger);}
+  .gantt-note{margin-top:10px;font-size:11.5px;color:var(--text-mid);}
 
-  footer.note{
-    text-align:center;color:var(--text-light);font-size:11.5px;margin-top:30px;
+  footer.note{text-align:center;color:var(--text-light);font-size:11px;margin-top:30px;}
+
+  @media(max-width:520px){
+    .app-header{padding:20px 18px;}
+    .container{padding:18px 16px 4px;}
+    .card{padding:18px 16px;}
   }
 </style>
 </head>
@@ -351,8 +359,8 @@
 /* ============ CONSTANTS ============ */
 const DAY_SHORT = ['א׳','ב׳','ג׳','ד׳','ה׳','ו׳','ש׳'];
 const DAY_FULL  = ['ראשון','שני','שלישי','רביעי','חמישי','שישי','שבת'];
-const SLOTS = 48; // 30-min slots per day
-const ROWH = 12;  // px per slot in calendar
+const SLOTS = 48;
+const ROWH = 12;
 
 /* ============ STATE ============ */
 let state = {
@@ -373,21 +381,19 @@ let state = {
   ],
   nextConstraintId: 6,
   nextTaskId: 7,
-  view: 'setup', // 'setup' | 'results'
-  resultsTab: 'calendar', // 'calendar' | 'gantt'
-  result: null, // {grid, assignments, unscheduled}
+  step: 1,
+  constraintFormOpen: false,
+  taskFormOpen: false,
+  resultsTab: 'calendar',
+  result: null,
+  cError: '',
+  tError: '',
 };
 
 /* ============ TIME HELPERS ============ */
 function timeToSlot(t){
   const [h,m] = t.split(':').map(Number);
   return Math.round((h*60+m)/30);
-}
-function slotToTime(s){
-  const totalMin = s*30;
-  const h = Math.floor(totalMin/60);
-  const m = totalMin%60;
-  return String(h).padStart(2,'0')+':'+String(m).padStart(2,'0');
 }
 function applyRange(dayArr, startStr, endStr, fn){
   let s = timeToSlot(startStr), e = timeToSlot(endStr);
@@ -396,13 +402,12 @@ function applyRange(dayArr, startStr, endStr, fn){
   if(e > s){
     for(let i=s;i<e;i++) fn(dayArr[i]);
   } else {
-    // wraps past midnight -> apply to end of day AND start of day (recurring nightly pattern)
     for(let i=s;i<SLOTS;i++) fn(dayArr[i]);
     for(let i=0;i<e;i++) fn(dayArr[i]);
   }
 }
 
-/* ============ SCHEDULING ENGINE ============ */
+/* ============ SCHEDULING ENGINE (unchanged logic) ============ */
 function buildGrid(constraints){
   const grid = [];
   for(let d=0; d<7; d++){
@@ -420,7 +425,6 @@ function buildGrid(constraints){
   });
   return grid;
 }
-
 function findFullFit(grid, windowType, neededSlots, maxDay){
   for(let d=0; d<=maxDay; d++){
     let s = 0;
@@ -436,7 +440,6 @@ function findFullFit(grid, windowType, neededSlots, maxDay){
   }
   return null;
 }
-
 function findLargestRunEarliest(grid, windowType, maxDay){
   for(let d=0; d<=maxDay; d++){
     let best = null;
@@ -460,7 +463,6 @@ function findLargestRunEarliest(grid, windowType, maxDay){
   }
   return null;
 }
-
 function scheduleTasks(constraints, tasks){
   const grid = buildGrid(constraints);
   const prioRank = {'גבוהה':0,'בינונית':1,'נמוכה':2};
@@ -471,24 +473,19 @@ function scheduleTasks(constraints, tasks){
     if(da !== db) return da-db;
     return b.duration - a.duration;
   });
-
   const assignments = [];
   const unscheduled = [];
-
   sorted.forEach(task=>{
     const windowType = task.category;
     const maxDay = task.deadlineDay==null ? 6 : task.deadlineDay;
     let remaining = Math.round(task.duration*2);
     const originalNeeded = remaining;
-
-    // 1) try to fit fully in one contiguous block
     const full = findFullFit(grid, windowType, remaining, maxDay);
     if(full){
       for(let i=0;i<full.len;i++) grid[full.day][full.start+i].taskId = task.id;
       assignments.push({taskId:task.id, day:full.day, startSlot:full.start, endSlot:full.start+full.len});
       remaining = 0;
     } else {
-      // 2) fragment across up to 3 chunks, earliest-available first
       let attempts = 0;
       while(remaining > 0 && attempts < 4){
         attempts++;
@@ -500,28 +497,46 @@ function scheduleTasks(constraints, tasks){
         remaining -= take;
       }
     }
-
     if(remaining > 0){
       unscheduled.push({task, missingHours: remaining/2, totalHours: originalNeeded/2});
     }
   });
-
   return {grid, assignments, unscheduled};
 }
 
-/* ============ RENDER: SETUP VIEW ============ */
-function typeTagClass(type){
-  if(type==='עבודה') return 'tag-work';
-  if(type==='בית') return 'tag-home';
-  return 'tag-blocked';
+/* ============ SUMMARY HELPERS ============ */
+function sumConstraintHours(type){
+  return state.constraints.filter(c=>c.type===type).reduce((sum,c)=>{
+    let s=timeToSlot(c.start), e=timeToSlot(c.end);
+    let slotsPer = e>s ? (e-s) : (SLOTS-s+e);
+    return sum + slotsPer*c.days.length*0.5;
+  },0);
+}
+function sumTaskHours(category){
+  return state.tasks.filter(t=>t.category===category).reduce((s,t)=>s+t.duration,0);
 }
 
+/* ============ ESCAPE ============ */
+function escapeHtml(str){
+  return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+/* ============ STEP 1: FRAMEWORK ============ */
+function typeTagClass(type){
+  if(type==='עבודה') return {bar:'bar-work', bg:'background:var(--work)'};
+  if(type==='בית') return {bar:'bar-home', bg:'background:var(--home)'};
+  return {bar:'bar-blocked', bg:'background:var(--blocked)'};
+}
 function renderConstraintsList(){
-  if(state.constraints.length===0) return '<div class="empty-note">עדיין לא הגדרת גבולות זמן. הוסף למטה.</div>';
+  if(state.constraints.length===0){
+    return `<div class="empty-state"><div class="glyph">◷</div><p>עדיין אין בלוקים. הוסף את שעות העבודה שלך כדי להתחיל.</p></div>`;
+  }
   return state.constraints.map(c=>{
     const daysStr = c.days.slice().sort((a,b)=>a-b).map(d=>DAY_SHORT[d]).join('·');
+    const cls = typeTagClass(c.type);
     return `<div class="item-row">
-      <span class="tag ${typeTagClass(c.type)}">${c.type}</span>
+      <div class="bar ${cls.bar}"></div>
+      <span class="type-label" style="${cls.bg}">${c.type}</span>
       <div class="main">
         <div class="name">${escapeHtml(c.name)}</div>
         <div class="meta">${daysStr} &nbsp;·&nbsp; ${c.start}–${c.end}</div>
@@ -531,12 +546,75 @@ function renderConstraintsList(){
   }).join('');
 }
 
+function renderStep1(){
+  const workH = sumConstraintHours('עבודה');
+  const homeH = sumConstraintHours('בית');
+  return `
+    <div class="card step-panel">
+      <h2>המסגרת שלך</h2>
+      <p class="sub">שעות עבודה, זמן בית, שינה ומחויבויות קבועות — חוזרים על עצמם כל שבוע.</p>
+      <div class="stat-line">
+        <span>שעות עבודה מוגדרות: <b>${workH}</b></span>
+        <span>שעות בית מוגדרות: <b>${homeH}</b></span>
+        <span>${state.constraints.length} בלוקים סה״כ</span>
+      </div>
+      <div id="constraints-list">${renderConstraintsList()}</div>
+
+      <details class="add-details" id="c-details" ${state.constraintFormOpen ? 'open' : ''} ontoggle="state.constraintFormOpen=this.open">
+        <summary><span class="plusicon">+</span> הוספת בלוק זמן</summary>
+        <div class="add-form">
+          <div class="field">
+            <label class="field-label">שם הבלוק</label>
+            <input type="text" id="c-name" placeholder="לדוגמה: שעות עבודה">
+          </div>
+          <div class="field">
+            <label class="field-label">סוג</label>
+            <div class="pill-group" id="c-type-group">
+              <div class="pill active" data-value="עבודה" onclick="selectPill(this)">עבודה</div>
+              <div class="pill" data-value="בית" onclick="selectPill(this)">בית</div>
+              <div class="pill" data-value="חסום" onclick="selectPill(this)">חסום</div>
+              <div class="pill" data-value="שינה" onclick="selectPill(this)">שינה</div>
+            </div>
+          </div>
+          <div class="row2">
+            <div class="field">
+              <label class="field-label">משעה</label>
+              <input type="time" id="c-start" value="09:00">
+            </div>
+            <div class="field">
+              <label class="field-label">עד שעה</label>
+              <input type="time" id="c-end" value="17:00">
+            </div>
+          </div>
+          <div class="field">
+            <label class="field-label">ימים</label>
+            <div class="day-picker" id="c-days">
+              ${DAY_SHORT.map((d,i)=>`<div class="day-chip ${[0,1,2,3,4].includes(i)?'active':''}" data-day="${i}" onclick="toggleDayChip(this)">${d}</div>`).join('')}
+            </div>
+          </div>
+          <div class="inline-error ${state.cError?'show':''}">${state.cError}</div>
+          <button class="btn btn-brass btn-full" onclick="addConstraint()">הוסף בלוק</button>
+        </div>
+      </details>
+
+      <div class="step-actions single">
+        <button class="btn btn-outline" onclick="setStep(2)">המשך למשימות ←</button>
+      </div>
+    </div>
+  `;
+}
+
+/* ============ STEP 2: TASKS ============ */
 function renderTasksList(){
-  if(state.tasks.length===0) return '<div class="empty-note">עדיין לא הוספת משימות. הוסף למטה.</div>';
+  if(state.tasks.length===0){
+    return `<div class="empty-state"><div class="glyph">☰</div><p>עדיין אין משימות. הוסף את מה שאתה צריך להספיק השבוע.</p></div>`;
+  }
   return state.tasks.map(t=>{
     const dl = t.deadlineDay==null ? 'ללא דדליין' : 'עד יום '+DAY_FULL[t.deadlineDay];
+    const cls = t.category==='עבודה' ? {bar:'bar-work', bg:'background:var(--work)'} : {bar:'bar-home', bg:'background:var(--home)'};
     return `<div class="item-row">
-      <span class="tag ${t.category==='עבודה'?'tag-work':'tag-home'}">${t.category}</span>
+      <div class="bar ${cls.bar}"></div>
+      <span class="type-label" style="${cls.bg}">${t.category}</span>
       <div class="main">
         <div class="name">${escapeHtml(t.name)}</div>
         <div class="meta">${t.duration} ש׳ &nbsp;·&nbsp; עדיפות ${t.priority} &nbsp;·&nbsp; ${dl}</div>
@@ -546,169 +624,70 @@ function renderTasksList(){
   }).join('');
 }
 
-function dayPickerHtml(idPrefix, selectedDays){
-  return `<div class="day-picker" id="${idPrefix}-days">
-    ${DAY_SHORT.map((d,i)=>`<div class="day-chip ${selectedDays.includes(i)?'active':''}" data-day="${i}" onclick="toggleDayChip(this)">${d}</div>`).join('')}
-  </div>`;
-}
-
-function renderSetupView(){
+function renderStep2(){
+  const workH = sumTaskHours('עבודה');
+  const homeH = sumTaskHours('בית');
   return `
-    <div class="container">
-      <div class="grid-2">
-        <div class="card">
-          <h2>1. המסגרת שלך</h2>
-          <p class="sub">שעות עבודה, זמן בית, שינה, ומחויבויות קבועות (כמו חדר כושר או נסיעות) — הכל חוזר על עצמו כל שבוע.</p>
-          <div id="constraints-list">${renderConstraintsList()}</div>
-          <div class="form-block">
-            <div class="form-grid">
-              <div class="full">
-                <label>שם הבלוק</label>
-                <input type="text" id="c-name" placeholder="לדוגמה: שעות עבודה">
-              </div>
-              <div>
-                <label>סוג</label>
-                <select id="c-type">
-                  <option value="עבודה">עבודה — זמין למשימות עבודה</option>
-                  <option value="בית">בית — זמין למשימות בית</option>
-                  <option value="חסום">חסום — לא זמין לשיבוץ</option>
-                  <option value="שינה">שינה — לא זמין לשיבוץ</option>
-                </select>
-              </div>
-              <div></div>
-              <div>
-                <label>משעה</label>
-                <input type="time" id="c-start" value="09:00">
-              </div>
-              <div>
-                <label>עד שעה</label>
-                <input type="time" id="c-end" value="17:00">
-              </div>
-              <div class="full">
-                <label>ימים</label>
-                ${dayPickerHtml('c', [0,1,2,3,4])}
-              </div>
-            </div>
-            <button class="btn btn-outline btn-full" onclick="addConstraint()">+ הוסף בלוק זמן</button>
-          </div>
-        </div>
-
-        <div class="card">
-          <h2>2. המשימות שלך</h2>
-          <p class="sub">כל מה שאתה צריך להספיק — בעבודה או בבית. תן לכל משימה משך, עדיפות, ואם יש — דדליין.</p>
-          <div id="tasks-list">${renderTasksList()}</div>
-          <div class="form-block">
-            <div class="form-grid">
-              <div class="full">
-                <label>שם המשימה</label>
-                <input type="text" id="t-name" placeholder="לדוגמה: הכנת מצגת">
-              </div>
-              <div>
-                <label>שייכת ל</label>
-                <select id="t-category">
-                  <option value="עבודה">עבודה</option>
-                  <option value="בית">בית</option>
-                </select>
-              </div>
-              <div>
-                <label>משך (בשעות)</label>
-                <input type="number" id="t-duration" min="0.5" step="0.5" value="1">
-              </div>
-              <div>
-                <label>עדיפות</label>
-                <select id="t-priority">
-                  <option value="גבוהה">גבוהה</option>
-                  <option value="בינונית" selected>בינונית</option>
-                  <option value="נמוכה">נמוכה</option>
-                </select>
-              </div>
-              <div>
-                <label>דדליין (יום בשבוע)</label>
-                <select id="t-deadline">
-                  <option value="">ללא</option>
-                  ${DAY_FULL.map((d,i)=>`<option value="${i}">${d}</option>`).join('')}
-                </select>
-              </div>
-            </div>
-            <button class="btn btn-outline btn-full" onclick="addTask()">+ הוסף משימה</button>
-          </div>
-        </div>
+    <div class="card step-panel">
+      <h2>המשימות שלך</h2>
+      <p class="sub">כל מה שאתה צריך להספיק — בעבודה או בבית.</p>
+      <div class="stat-line">
+        <span>שעות עבודה נדרשות: <b>${workH}</b></span>
+        <span>שעות בית נדרשות: <b>${homeH}</b></span>
+        <span>${state.tasks.length} משימות סה״כ</span>
       </div>
+      <div id="tasks-list">${renderTasksList()}</div>
 
-      <div class="maximize-bar">
-        <button class="btn btn-maximize" onclick="runMaximize()">מַקְסֵם את השבוע</button>
-        <div class="maximize-hint">נשבץ את המשימות שלך בתוך המסגרת שהגדרת, לפי עדיפות ודדליין.</div>
+      <details class="add-details" id="t-details" ${state.taskFormOpen ? 'open' : ''} ontoggle="state.taskFormOpen=this.open">
+        <summary><span class="plusicon">+</span> הוספת משימה</summary>
+        <div class="add-form">
+          <div class="field">
+            <label class="field-label">שם המשימה</label>
+            <input type="text" id="t-name" placeholder="לדוגמה: הכנת מצגת">
+          </div>
+          <div class="field">
+            <label class="field-label">שייכת ל</label>
+            <div class="pill-group" id="t-category-group">
+              <div class="pill active" data-value="עבודה" onclick="selectPill(this)">עבודה</div>
+              <div class="pill" data-value="בית" onclick="selectPill(this)">בית</div>
+            </div>
+          </div>
+          <div class="field">
+            <label class="field-label">משך (בשעות)</label>
+            <input type="number" id="t-duration" min="0.5" step="0.5" value="1">
+            <div class="mini-row">
+              ${[0.5,1,1.5,2,3,4].map(v=>`<div class="mini-chip" onclick="document.getElementById('t-duration').value='${v}'">${v} ש׳</div>`).join('')}
+            </div>
+          </div>
+          <div class="field">
+            <label class="field-label">עדיפות</label>
+            <div class="pill-group" id="t-priority-group">
+              <div class="pill" data-value="גבוהה" onclick="selectPill(this)">גבוהה</div>
+              <div class="pill active" data-value="בינונית" onclick="selectPill(this)">בינונית</div>
+              <div class="pill" data-value="נמוכה" onclick="selectPill(this)">נמוכה</div>
+            </div>
+          </div>
+          <div class="field">
+            <label class="field-label">דדליין</label>
+            <div class="day-picker" id="t-deadline-group">
+              <div class="day-chip none-chip active" data-day="none" onclick="selectSingleDayChip(this)">ללא</div>
+              ${DAY_SHORT.map((d,i)=>`<div class="day-chip" data-day="${i}" onclick="selectSingleDayChip(this)">${d}</div>`).join('')}
+            </div>
+          </div>
+          <div class="inline-error ${state.tError?'show':''}">${state.tError}</div>
+          <button class="btn btn-brass btn-full" onclick="addTask()">הוסף משימה</button>
+        </div>
+      </details>
+
+      <div class="step-actions">
+        <button class="btn btn-outline" onclick="setStep(1)">← חזרה למסגרת</button>
+        <button class="btn btn-brass" onclick="setStep(3)">צפה בשבוע הממוקסם ←</button>
       </div>
-
-      ${state.result ? renderResults() : ''}
     </div>
   `;
 }
 
-/* ============ RENDER: RESULTS ============ */
-function renderResults(){
-  const {grid, assignments, unscheduled} = state.result;
-
-  // totals for dial
-  let workScheduled=0, homeScheduled=0, blockedTotal=0;
-  for(let d=0;d<7;d++){
-    for(let s=0;s<SLOTS;s++){
-      const cell = grid[d][s];
-      if(cell.blocked) blockedTotal += 0.5;
-      else if(cell.taskId!==null){
-        const task = state.tasks.find(t=>t.id===cell.taskId);
-        if(task && task.category==='עבודה') workScheduled += 0.5;
-        else if(task && task.category==='בית') homeScheduled += 0.5;
-      }
-    }
-  }
-  const total = 168;
-  const freeTotal = Math.max(0, total - workScheduled - homeScheduled - blockedTotal);
-  const p1 = (workScheduled/total*100);
-  const p2 = p1 + (homeScheduled/total*100);
-  const p3 = p2 + (blockedTotal/total*100);
-
-  const unscheduledHtml = unscheduled.length ? `
-    <div class="unscheduled-warn">
-      <strong>⚠ ${unscheduled.length} משימות לא נכנסו במלואן לזמן הפנוי</strong>
-      ${unscheduled.map(u=>`${escapeHtml(u.task.name)} — חסרות עוד ${u.missingHours} שעות (נסה להרחיב את חלון ה${u.task.category} או להוריד עדיפות/היקף)`).join('<br>')}
-    </div>` : '';
-
-  return `
-    <div class="results">
-      <div class="hero-panel">
-        <div class="dial-wrap">
-          <div class="dial" style="background:conic-gradient(var(--work) 0% ${p1}%, var(--home) ${p1}% ${p2}%, var(--blocked) ${p2}% ${p3}%, var(--free) ${p3}% 100%);">
-            <div class="dial-hole">
-              <div class="num">${Math.round(freeTotal)}</div>
-              <div class="lbl">שעות פנויות<br>מתוך 168 השבוע</div>
-            </div>
-          </div>
-        </div>
-        <div class="hero-text">
-          <h3>השבוע שלך, ממוקסם</h3>
-          <p>${Math.round(workScheduled)} שעות עבודה ו-${Math.round(homeScheduled)} שעות בית שובצו בתוך המסגרת שהגדרת. השאר — ${Math.round(freeTotal)} שעות — נשאר פנוי באמת.</p>
-          <div class="legend">
-            <div class="li"><span class="dot" style="background:var(--work)"></span>עבודה משובצת</div>
-            <div class="li"><span class="dot" style="background:var(--home)"></span>בית משובץ</div>
-            <div class="li"><span class="dot" style="background:var(--blocked)"></span>חסום / שינה</div>
-            <div class="li"><span class="dot" style="background:var(--free)"></span>פנוי</div>
-          </div>
-        </div>
-      </div>
-
-      ${unscheduledHtml}
-
-      <div class="tabs">
-        <button class="tab-btn ${state.resultsTab==='calendar'?'active':''}" onclick="setResultsTab('calendar')">לוח שבועי</button>
-        <button class="tab-btn ${state.resultsTab==='gantt'?'active':''}" onclick="setResultsTab('gantt')">ציר זמן (גאנט)</button>
-      </div>
-
-      ${state.resultsTab==='calendar' ? renderCalendar(grid) : renderGantt(assignments)}
-    </div>
-  `;
-}
-
+/* ============ STEP 3: RESULTS ============ */
 function getRuns(dayGrid, valueFn){
   const runs = [];
   let cur = null;
@@ -722,10 +701,8 @@ function getRuns(dayGrid, valueFn){
 }
 
 function renderCalendar(grid){
-  // day order for RTL visual: Sunday rightmost -> Saturday leftmost -> axis leftmost of all
   const dayOrder = [0,1,2,3,4,5,6];
-
-  const headCells = dayOrder.map(d => `<div class="d">${DAY_FULL[d]}</div>`).join('') + `<div class="d axis-head"></div>`;
+  const headCells = dayOrder.map(d => `<div class="d">${DAY_FULL[d]}</div>`).join('') + `<div class="d"></div>`;
 
   const dayCols = dayOrder.map(d=>{
     const underlay = getRuns(grid[d], c => c.blocked ? 'blocked' : (c.window || null));
@@ -733,12 +710,11 @@ function renderCalendar(grid){
 
     const underlayHtml = underlay.map(r=>{
       const top = r.start*ROWH, height=(r.end-r.start)*ROWH;
-      let cls = 'block block-window ';
-      let label = '';
-      if(r.value==='blocked'){ cls+='block-blocked'; label = 'חסום'; }
-      else if(r.value==='עבודה'){ cls+='block-work-window'; label=''; }
-      else if(r.value==='בית'){ cls+='block-home-window'; label=''; }
-      return `<div class="${cls}" style="top:${top}px;height:${height}px;">${label}</div>`;
+      let cls = 'block ';
+      if(r.value==='blocked'){ cls+='block-blocked'; }
+      else if(r.value==='עבודה'){ cls+='block-work-window'; }
+      else if(r.value==='בית'){ cls+='block-home-window'; }
+      return `<div class="${cls}" style="top:${top}px;height:${height}px;"></div>`;
     }).join('');
 
     const overlayHtml = overlay.map(r=>{
@@ -778,16 +754,14 @@ function renderGantt(assignments){
       bars = `<div class="gantt-bar unscheduled" style="right:0;left:0;">לא שובץ</div>`;
     } else {
       bars = taskAssignments.map(a=>{
-        const colFromRight = a.day; // 0=Sunday=rightmost
-        const rightPct = colFromRight*dayWidth + (a.startSlot/SLOTS)*dayWidth;
+        const rightPct = a.day*dayWidth + (a.startSlot/SLOTS)*dayWidth;
         const widthPct = ((a.endSlot-a.startSlot)/SLOTS)*dayWidth;
-        return `<div class="gantt-bar ${catClass}" style="right:${rightPct}%;width:${widthPct}%;">${escapeHtml(task.name)}</div>`;
+        return `<div class="gantt-bar ${catClass}" style="right:${rightPct}%;width:${widthPct}%;" title="${escapeHtml(task.name)}">${escapeHtml(task.name)}</div>`;
       }).join('');
     }
 
     let deadlineMark = '';
     if(task.deadlineDay!=null){
-      // end of the deadline day = left edge of that day's column = (deadlineDay+1) columns in from the right
       const markRight = (task.deadlineDay+1)*dayWidth;
       deadlineMark = `<div class="gantt-deadline" style="right:${markRight}%;"></div>`;
     }
@@ -802,43 +776,128 @@ function renderGantt(assignments){
 
   return `
     <div class="gantt">
-      <div class="gantt-head">
-        <div></div>
-        <div class="gantt-daylabels">${dayLabels}</div>
-      </div>
+      <div class="gantt-head"><div></div><div class="gantt-daylabels">${dayLabels}</div></div>
       ${rows}
-      <div style="margin-top:10px;font-size:11.5px;color:var(--text-mid);">קו מקווקו אדום = דדליין המשימה</div>
+      <div class="gantt-note">קו מקווקו אדום = דדליין המשימה</div>
+    </div>
+  `;
+}
+
+function renderStep3(){
+  if(!state.result){
+    return `
+      <div class="card step-panel">
+        <div class="empty-state">
+          <div class="glyph">◷</div>
+          <p>נדרשים גם מסגרת וגם משימות כדי לחשב את השבוע הממוקסם.</p>
+          <div style="margin-top:14px;">
+            <button class="btn btn-brass" onclick="setStep(1)">עבור למסגרת</button>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  const {grid, assignments, unscheduled} = state.result;
+  let workScheduled=0, homeScheduled=0, blockedTotal=0;
+  for(let d=0;d<7;d++){
+    for(let s=0;s<SLOTS;s++){
+      const cell = grid[d][s];
+      if(cell.blocked) blockedTotal += 0.5;
+      else if(cell.taskId!==null){
+        const task = state.tasks.find(t=>t.id===cell.taskId);
+        if(task && task.category==='עבודה') workScheduled += 0.5;
+        else if(task && task.category==='בית') homeScheduled += 0.5;
+      }
+    }
+  }
+  const total = 168;
+  const freeTotal = Math.max(0, total - workScheduled - homeScheduled - blockedTotal);
+  const p1 = (workScheduled/total*100);
+  const p2 = p1 + (homeScheduled/total*100);
+  const p3 = p2 + (blockedTotal/total*100);
+
+  const unscheduledHtml = unscheduled.length ? `
+    <div class="unscheduled-warn">
+      <strong>⚠ ${unscheduled.length} משימות לא נכנסו במלואן לזמן הפנוי</strong>
+      ${unscheduled.map(u=>`${escapeHtml(u.task.name)} — חסרות עוד ${u.missingHours} שעות`).join('<br>')}
+    </div>` : '';
+
+  return `
+    <div class="step-panel">
+      <div class="back-link"><button class="btn-ghost" onclick="setStep(2)">⟵ חזרה לעריכה</button></div>
+      <div class="hero-panel">
+        <div class="dial-wrap">
+          <div class="dial" style="background:conic-gradient(var(--work) 0% ${p1}%, var(--home) ${p1}% ${p2}%, var(--blocked) ${p2}% ${p3}%, var(--free) ${p3}% 100%);">
+            <div class="dial-hole">
+              <div class="num">${Math.round(freeTotal)}</div>
+              <div class="lbl">שעות פנויות<br>מתוך 168 השבוע</div>
+            </div>
+          </div>
+        </div>
+        <div class="hero-text">
+          <h3>השבוע שלך, ממוקסם</h3>
+          <p>${Math.round(workScheduled)} שעות עבודה ו-${Math.round(homeScheduled)} שעות בית שובצו בתוך המסגרת שהגדרת. השאר — ${Math.round(freeTotal)} שעות — נשאר פנוי באמת.</p>
+          <div class="legend">
+            <div class="li"><span class="dot" style="background:var(--work)"></span>עבודה משובצת</div>
+            <div class="li"><span class="dot" style="background:var(--home)"></span>בית משובץ</div>
+            <div class="li"><span class="dot" style="background:var(--blocked)"></span>חסום / שינה</div>
+            <div class="li"><span class="dot" style="background:var(--free)"></span>פנוי</div>
+          </div>
+        </div>
+      </div>
+
+      ${unscheduledHtml}
+
+      <div class="tabs">
+        <button class="tab-btn ${state.resultsTab==='calendar'?'active':''}" onclick="setResultsTab('calendar')">לוח שבועי</button>
+        <button class="tab-btn ${state.resultsTab==='gantt'?'active':''}" onclick="setResultsTab('gantt')">ציר זמן (גאנט)</button>
+      </div>
+
+      ${state.resultsTab==='calendar' ? renderCalendar(grid) : renderGantt(assignments)}
     </div>
   `;
 }
 
 /* ============ ACTIONS ============ */
-function escapeHtml(str){
-  return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function selectPill(el){
+  const parent = el.parentElement;
+  parent.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
 }
-
 function toggleDayChip(el){
   el.classList.toggle('active');
 }
-
-function getSelectedDays(prefix){
-  const container = document.getElementById(prefix+'-days');
-  return Array.from(container.querySelectorAll('.day-chip.active')).map(el => Number(el.dataset.day));
+function selectSingleDayChip(el){
+  const parent = el.parentElement;
+  parent.querySelectorAll('.day-chip').forEach(d=>d.classList.remove('active'));
+  el.classList.add('active');
+}
+function getSelectedDays(containerId){
+  return Array.from(document.getElementById(containerId).querySelectorAll('.day-chip.active')).map(el => Number(el.dataset.day));
+}
+function getActivePillValue(containerId){
+  const c = document.getElementById(containerId);
+  const active = c.querySelector('.pill.active');
+  return active ? active.dataset.value : null;
 }
 
 function addConstraint(){
   const name = document.getElementById('c-name').value.trim();
-  const type = document.getElementById('c-type').value;
+  const type = getActivePillValue('c-type-group');
   const start = document.getElementById('c-start').value;
   const end = document.getElementById('c-end').value;
-  const days = getSelectedDays('c');
-  if(!name || days.length===0 || !start || !end){
-    alert('נא למלא שם, לפחות יום אחד, ושעות התחלה/סיום.');
-    return;
-  }
+  const days = getSelectedDays('c-days');
+  if(!name){ state.cError='נא לתת שם לבלוק.'; render(); return; }
+  if(days.length===0){ state.cError='נא לבחור לפחות יום אחד.'; render(); return; }
+  if(!start || !end){ state.cError='נא לבחור שעות התחלה וסיום.'; render(); return; }
+  state.cError = '';
   state.constraints.push({id: state.nextConstraintId++, name, type, days, start, end});
   state.result = null;
+  state.constraintFormOpen = true;
   render();
+  const nameEl = document.getElementById('c-name');
+  if(nameEl){ nameEl.value=''; nameEl.focus(); }
 }
 function removeConstraint(id){
   state.constraints = state.constraints.filter(c=>c.id!==id);
@@ -848,18 +907,21 @@ function removeConstraint(id){
 
 function addTask(){
   const name = document.getElementById('t-name').value.trim();
-  const category = document.getElementById('t-category').value;
+  const category = getActivePillValue('t-category-group');
   const duration = parseFloat(document.getElementById('t-duration').value);
-  const priority = document.getElementById('t-priority').value;
-  const deadlineRaw = document.getElementById('t-deadline').value;
-  const deadlineDay = deadlineRaw==='' ? null : Number(deadlineRaw);
-  if(!name || !duration || duration<=0){
-    alert('נא למלא שם משימה ומשך תקין.');
-    return;
-  }
+  const priority = getActivePillValue('t-priority-group');
+  const deadlineGroup = document.getElementById('t-deadline-group');
+  const activeDeadline = deadlineGroup.querySelector('.day-chip.active');
+  const deadlineDay = (!activeDeadline || activeDeadline.dataset.day==='none') ? null : Number(activeDeadline.dataset.day);
+  if(!name){ state.tError='נא לתת שם למשימה.'; render(); return; }
+  if(!duration || duration<=0){ state.tError='נא להזין משך תקין (גדול מ-0).'; render(); return; }
+  state.tError = '';
   state.tasks.push({id: state.nextTaskId++, name, category, duration, priority, deadlineDay});
   state.result = null;
+  state.taskFormOpen = true;
   render();
+  const nameEl = document.getElementById('t-name');
+  if(nameEl){ nameEl.value=''; nameEl.focus(); }
 }
 function removeTask(id){
   state.tasks = state.tasks.filter(t=>t.id!==id);
@@ -867,41 +929,62 @@ function removeTask(id){
   render();
 }
 
-function runMaximize(){
-  if(state.constraints.length===0){
-    alert('הוסף לפחות בלוק זמן אחד (למשל שעות עבודה) לפני המקסום.');
-    return;
+function setStep(n){
+  state.step = n;
+  if(n===3){
+    if(state.constraints.length && state.tasks.length){
+      state.result = scheduleTasks(state.constraints, state.tasks);
+    } else {
+      state.result = null;
+    }
   }
-  if(state.tasks.length===0){
-    alert('הוסף לפחות משימה אחת לפני המקסום.');
-    return;
-  }
-  state.result = scheduleTasks(state.constraints, state.tasks);
-  state.view = 'results';
   render();
-  setTimeout(()=>{
-    const el = document.querySelector('.results');
-    if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
-    const cal = document.getElementById('cal-scroll');
-    if(cal) cal.scrollTop = 6*2*ROWH; // scroll to ~06:00
-  }, 30);
+  window.scrollTo({top:0, behavior:'smooth'});
+  if(n===3){
+    setTimeout(()=>{
+      const cal = document.getElementById('cal-scroll');
+      if(cal) cal.scrollTop = 6*2*ROWH;
+    }, 30);
+  }
 }
-
 function setResultsTab(tab){
   state.resultsTab = tab;
   render();
 }
 
 /* ============ ROOT RENDER ============ */
+function renderStepper(){
+  const steps = [
+    {n:1, label:'מסגרת', done: state.constraints.length>0},
+    {n:2, label:'משימות', done: state.tasks.length>0},
+    {n:3, label:'תוצאה', done: !!state.result},
+  ];
+  return `<div class="stepper">
+    ${steps.map(s=>`
+      <div class="step-tab ${state.step===s.n?'active':''} ${s.done && state.step!==s.n?'done':''}" onclick="setStep(${s.n})">
+        <span class="num">${s.done && state.step!==s.n ? '✓' : s.n}</span>${s.label}
+      </div>
+    `).join('')}
+  </div>`;
+}
+
 function render(){
   const app = document.getElementById('app');
+  let stepHtml = '';
+  if(state.step===1) stepHtml = renderStep1();
+  else if(state.step===2) stepHtml = renderStep2();
+  else stepHtml = renderStep3();
+
   app.innerHTML = `
     <div class="app-header">
       <div class="eyebrow">מתכנן זמן חכם</div>
       <h1>משבצת</h1>
-      <p>הגדר את גבולות הגזרה שלך — שעות עבודה, זמן בית, שינה ומחויבויות קבועות — ותן למשבצת לשבץ את המשימות שלך כך שתמקסם כל שעה, גם בעבודה וגם בבית.</p>
+      <p>הגדר את גבולות הגזרה שלך, ותן למשבצת לשבץ את המשימות כך שתמקסם כל שעה — גם בעבודה וגם בבית.</p>
     </div>
-    ${renderSetupView()}
+    <div class="container">
+      ${renderStepper()}
+      ${stepHtml}
+    </div>
     <footer class="note">כל הנתונים נשמרים רק בזיכרון הדפדפן במהלך השימוש הנוכחי.</footer>
   `;
 }
